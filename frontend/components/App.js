@@ -10,27 +10,15 @@ export default class App extends React.Component {
     error: '',
   }
 
-  fetchAllTodos = () => {
-    axios.get(URL)
-    .then(res => {
-        this.setState({
-          ...this.state,
-          todos: []
-        })
-    })
-    .catch(err => {
-      
-      
-    })
-
-  }
+ 
   //helperfunction2fetch
   fetchAllTodos = () => {
     axios.get(URL).then(res => {
       
       this.setState({ ...this.state, todos: res.data.data })
     }).catch(err=>{
-      console.log(err)
+      this.setState({...this.state, error : err.message})
+      console.log(err.message)
     })
   }
 
@@ -45,6 +33,7 @@ export default class App extends React.Component {
   
     return (
       <div>
+       {this.state.error !== "" && <div>Error: {this.state.error}</div>}
       <h2>Todos:</h2>
     <div id="todos">
       {this.state.todos.map(td=>{
