@@ -8,8 +8,33 @@ export default class App extends React.Component {
   state = {
     todos: [],
     error: '',
+    toDoNameInput: ''
   }
 
+
+  changeHandler = evt => {
+    const { value } = evt.target;
+    this.setState({
+      ...this.state,
+      toDoNameInput: value
+    })
+  }
+
+  postNewTodo = () => {
+    axios.post(URL, {name: this.state.toDoNameInput})
+    .then(res=> {
+      debugger
+    }).catch(err=> {
+      this.setState({
+        ...this.state,
+        error: err.response.data.message
+      })
+    })
+  }
+  submitHandler = evt => {
+    evt.preventDefault();
+    this.postNewTodo();
+  }
  
   //helperfunction2fetch
   fetchAllTodos = () => {
@@ -39,12 +64,11 @@ export default class App extends React.Component {
       {this.state.todos.map(td=>{
         return <div key={td.id}>{td.name}</div>
       })}
-      <div>Walk The Dog</div>
-      <div>Take Out The Trash</div>  
+      
     </div>
       <form id="todoForm">
-        <input type ="text" placeholder="Type todo"></input>
-        <input  type="submit"></input>
+        <input onChange={this.changeHandler} value={this.state.toDoNameInput} type ="text" placeholder="Type todo"></input>
+        <input onClick={this.submitHandler} type="submit" value="submit"/>
         <button>Clear completed</button>
       </form>
     </div>
