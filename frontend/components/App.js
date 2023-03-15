@@ -27,7 +27,9 @@ export default class App extends React.Component {
   postNewTodo = () => {
     axios.post(URL, {name: this.state.toDoNameInput})
     .then(res=> {
-      this.fetchAllTodos()
+      console.log(res.data.data)
+      this.setState({...this.state, todos: [...this.state.todos, res.data.data]})
+      
       this.resetForm();
     }).catch( this.setAxiosResponseError)
     
@@ -56,7 +58,7 @@ export default class App extends React.Component {
   
     return (
       <div>
-       {this.state.error !== "" && <div>Error: {this.state.error}</div>}
+       {this.state.error !== "" && <h2 style={{color: "red"}}>Error: {this.state.error}</h2>}
       <h2>Todos:</h2>
     <div id="todos">
       {this.state.todos.map(td=>{
