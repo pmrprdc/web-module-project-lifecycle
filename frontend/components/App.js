@@ -8,7 +8,8 @@ export default class App extends React.Component {
   state = {
     todos: [],
     error: '',
-    toDoNameInput: ''
+    toDoNameInput: '',
+    displayCompleteds: true,
   }
 
 
@@ -28,6 +29,15 @@ export default class App extends React.Component {
         })
       })
       .catch(this.setAxiosResponseError)
+  }
+
+  toggleDisplayCompleteds = (evt) => {
+    evt.preventDefault();
+    this.setState({
+      ...this.state,
+      displayCompleteds : !this.state.displayCompleteds
+    })
+ 
   }
 
 
@@ -61,7 +71,7 @@ export default class App extends React.Component {
     evt.preventDefault();
     this.setState({
       ...this.state,
-      todos: this.state.todos.filter(td=>{
+      uncompleted: this.state.todos.filter(td=>{
         return !td.completed;
       })
     })    
@@ -90,15 +100,22 @@ export default class App extends React.Component {
        {this.state.error !== "" && <h2 style={{color: "red"}}>Error: {this.state.error}</h2>}
       <h2>Todos:</h2>
     <div id="todos">
-      {this.state.todos.map(td=>{
-        return <div onClick={this.toggleCompleted(td.id)} key={td.id}>{td.name}{td.completed? 'COMPLETE' : ''}</div>
-      })}
+    
+    
       
+      {
+     this.state.todos.reduce((acc, td)=>{
+          if(this.state.displayCompleteds || !td.completed) return acc.concat(<div onClick={this.toggleCompleted(td.id)} key={td.id}>{td.name}{td.completed? 'COMPLETE' : ''}</div>)
+          return acc
+ //<div onClick={this.toggleCompleted(td.id)} key={td.id}>{td.name}{td.completed? 'COMPLETE' : ''}</div>
+      },[])}
+
+
     </div>
       <form id="todoForm">
         <input onChange={this.changeHandler} value={this.state.toDoNameInput} type ="text" placeholder="Type todo"></input>
         <input onClick={this.submitHandler} type="submit" value="submit"/>
-        <button onClick={this.clearCompleted}>Clear completed</button>
+        <button onClick={this.toggleDisplayCompleteds}>{this.state.displayCompleteds ? "Hide" : "Show"} completed</button>
       </form>
     </div>
 
