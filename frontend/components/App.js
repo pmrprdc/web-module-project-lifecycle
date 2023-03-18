@@ -56,6 +56,17 @@ export default class App extends React.Component {
     evt.preventDefault();
     this.postNewTodo();
   }
+
+  clearCompleted = (evt) => {
+    evt.preventDefault();
+    this.setState({
+      ...this.state,
+      todos: this.state.todos.filter(td=>{
+        return !td.completed;
+      })
+    })    
+
+  }
  
   //helperfunction2fetch
   fetchAllTodos = () => {
@@ -87,7 +98,7 @@ export default class App extends React.Component {
       <form id="todoForm">
         <input onChange={this.changeHandler} value={this.state.toDoNameInput} type ="text" placeholder="Type todo"></input>
         <input onClick={this.submitHandler} type="submit" value="submit"/>
-        <button>Clear completed</button>
+        <button onClick={this.clearCompleted}>Clear completed</button>
       </form>
     </div>
 
