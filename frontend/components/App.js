@@ -18,7 +18,6 @@ export default class App extends React.Component {
   toggleCompleted = id => evt => {
       axios.patch(`${URL}/${id}`)
       .then(res=>{
-        console.log(res.data.data)
         this.setState({
           ...this.state,
           todos: this.state.todos.map(td=>{
@@ -93,7 +92,7 @@ export default class App extends React.Component {
       <div>
        {this.state.error !== "" && <h2 style={{color: "red"}}>Error: {this.state.error}</h2>}
       <h2>Todos:</h2>
-        <TodoList todos={this.state.todos} displayCompleteds={this.displayCompleteds}
+        <TodoList todos={this.state.todos} displayCompleteds={this.state.displayCompleteds}
           toggleCompleted={this.toggleCompleted}
         />
     
