@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import Form from './Form'
 
 const URL = 'http://localhost:9000/api/todos'
 
@@ -67,16 +68,6 @@ export default class App extends React.Component {
     this.postNewTodo();
   }
 
-  clearCompleted = (evt) => {
-    evt.preventDefault();
-    this.setState({
-      ...this.state,
-      uncompleted: this.state.todos.filter(td=>{
-        return !td.completed;
-      })
-    })    
-
-  }
  
   //helperfunction2fetch
   fetchAllTodos = () => {
@@ -112,12 +103,15 @@ export default class App extends React.Component {
 
 
     </div>
-      <form id="todoForm">
-        <input onChange={this.changeHandler} value={this.state.toDoNameInput} type ="text" placeholder="Type todo"></input>
-        <input onClick={this.submitHandler} type="submit" value="submit"/>
-        <button onClick={this.toggleDisplayCompleteds}>{this.state.displayCompleteds ? "Hide" : "Show"} completed</button>
-      </form>
+      <Form changeHandler={this.changeHandler} 
+            submitHandler={this.submitHandler}
+            toDoNameInput={this.state.toDoNameInput}
+            toggleDisplayCompleteds={this.toggleDisplayCompleteds}
+            displayCompleteds = {this.state.displayCompleteds}
+            
+           />
     </div>
+    
 
     )
   }
