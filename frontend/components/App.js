@@ -12,6 +12,25 @@ export default class App extends React.Component {
   }
 
 
+  toggleCompleted = id => evt => {
+      axios.patch(`${URL}/${id}`)
+      .then(res=>{
+        console.log(res.data.data)
+        this.setState({
+          ...this.state,
+          todos: this.state.todos.map(td=>{
+            if(td.id === id){
+              return res.data.data;
+            } else {
+              return td;
+            }
+          })
+        })
+      })
+      .catch(this.setAxiosResponseError)
+  }
+
+
   changeHandler = evt => {
     const { value } = evt.target;
     this.setState({
@@ -29,7 +48,6 @@ export default class App extends React.Component {
     .then(res=> {
       console.log(res.data.data)
       this.setState({...this.state, todos: [...this.state.todos, res.data.data]})
-      
       this.resetForm();
     }).catch( this.setAxiosResponseError)
     
@@ -62,7 +80,7 @@ export default class App extends React.Component {
       <h2>Todos:</h2>
     <div id="todos">
       {this.state.todos.map(td=>{
-        return <div key={td.id}>{td.name}</div>
+        return <div onClick={this.toggleCompleted(td.id)} key={td.id}>{td.name}{td.completed? 'COMPLETE' : ''}</div>
       })}
       
     </div>
